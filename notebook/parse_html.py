@@ -13,16 +13,13 @@ html_files = glob.glob(path.join(filesFolder, "*.htm"))
 
 # %% Set up output file
 
-OUT_FILE = "../data/processed/top_apps_list.csv"
+OUT_FILE = "../data/raw/top_apps_list.csv"
 
 out_file = open(OUT_FILE, 'w')
 writer = csv.DictWriter(out_file, fieldnames=['id', 'top_chart_position','category','name','publisher','store_id'], delimiter=";", quoting=csv.QUOTE_MINIMAL) 
 writer.writeheader()
 
 # %% parse files
-
-# initialize unique app id
-app_id = 1
 
 for f in html_files:
     # read file
@@ -53,15 +50,12 @@ for f in html_files:
         
         # update results
         parsed_app.update({
-            'id': app_id,
+            'id': store_id,
             'top_chart_position': app_position,
             'category': category,
             'name': name,
-            'publisher': publisher,
-            'store_id': store_id
+            'publisher': publisher
         })
-
-        app_id = app_id + 1 
 
         writer.writerow(parsed_app)
 
