@@ -16,7 +16,7 @@ html_files = glob.glob(path.join(filesFolder, "*.htm"))
 OUT_FILE = "../data/raw/top_apps_list.csv"
 
 out_file = open(OUT_FILE, 'w')
-writer = csv.DictWriter(out_file, fieldnames=['id', 'top_chart_position','category','name','publisher','store_id'], delimiter=";", quoting=csv.QUOTE_MINIMAL) 
+writer = csv.DictWriter(out_file, fieldnames=['id', 'top_chart_position','category','name','publisher'], delimiter=";", quoting=csv.QUOTE_MINIMAL) 
 writer.writeheader()
 
 # %% parse files
