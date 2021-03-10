@@ -8,12 +8,12 @@ from bs4 import BeautifulSoup
 
 # %% Load html files
 
-filesFolder = "../data/raw/rawHTML"
+filesFolder = "../data/raw/appMagicHTML/top1000/top_grossing"
 html_files = glob.glob(path.join(filesFolder, "*.htm"))
 
 # %% Set up output file
 
-OUT_FILE = "../data/raw/top_apps_list.csv"
+OUT_FILE = "../data/raw/top_1000_apps_top_grossing.csv"
 
 out_file = open(OUT_FILE, 'w')
 writer = csv.DictWriter(out_file, fieldnames=['id', 'top_chart_position','category','name','publisher'], delimiter=";", quoting=csv.QUOTE_MINIMAL) 

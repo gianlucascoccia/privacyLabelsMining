@@ -106,6 +106,9 @@ ax_t.title.set_text('Tracking')
 ax_l.title.set_text('Linked')
 ax_u.title.set_text('Unlinked')
 
+ax_lc.set_xlabel('Label')
+ax_t.set_ylabel('App store category')
+
 # Loop over data dimensions and create text annotations.
 for i in range(len(categories)):
     for j in range(len(data_types)):
@@ -118,6 +121,6 @@ for i in range(len(data_types)):
     ax_lc.text(i,0, int(lTotals[i]), ha="center", va="center")
     ax_uc.text(i,0, int(uTotals[i]), ha="center", va="center")
 
-plt.savefig('figures/labels_heatmap.png')
+plt.savefig('figures/labels_heatmap.png', facecolor='white')
 
 # %%

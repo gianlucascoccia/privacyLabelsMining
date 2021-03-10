@@ -9,8 +9,8 @@ import os.path
 
 # %% script configuration
 
-APPS_LIST = '../../data/raw/top_apps_list.csv'
-OUT_FILE = '../../data/raw/apps_store_data.csv'
+APPS_LIST = '../../data/raw/top_1000_apps_top_grossing.csv'
+OUT_FILE = '../../data/raw/top_1000_apps_top_grossing_store_data.csv'
 ERROR_LOG = 'missing_data.txt'
 
 # %% fields to write in output
@@ -72,6 +72,7 @@ with open(APPS_LIST, 'r') as csvfile:
 
     # For each app in the list
     for index, row in enumerate(csvreader):
+
         print('Processing app N {}'.format(index))
         # Run the node scraper
         scraper = subprocess.run(['node', 'scrape_app.js', row['id']], stdout=subprocess.PIPE)
