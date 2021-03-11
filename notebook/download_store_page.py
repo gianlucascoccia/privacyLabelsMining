@@ -6,7 +6,7 @@ import requests
 
 # %% Script params
 
-IN_FILE = "../data/raw/top_1000_apps_free_store_data.csv"
+IN_FILE = "../data/raw/top_1000_apps_top_grossing_store_data.csv"
 outFolder = "../data/raw/storePageHTML"
 
 # %% download and save the store page for each app
