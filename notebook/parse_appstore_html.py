@@ -8,13 +8,13 @@ from bs4 import BeautifulSoup
 # %% Script parameters
 
 # List of apps for which parse data
-APP_LIST = "../data/raw/top_apps_list.csv"
+APP_LIST = "../data/raw/top_1000_apps_top_grossing_store_data.csv"
 
 # Folder with raw html app store pages
 HTMLfilesFolder = "../data/raw/storePageHTML"
 
 # File to save output
-OUT_FILE = "../data/raw/privacy_labels.csv"
+OUT_FILE = "../data/raw/privacy_labels_top_1000_top_grossing.csv"
 
 data_types = ['Health & Fitness', 'Location', 'Contact Info', 'Diagnostics', 'Sensitive Info', 'Usage Data', 'Browsing History', 'Contacts', 'Purchases', 'Identifiers', 'Other Data', 'Financial Info', 'Search History', 'User Content']
 
@@ -34,9 +34,9 @@ labels_list = csv.DictWriter(open(OUT_FILE, 'w'),
 app_list = csv.DictReader(open(APP_LIST, 'r'), delimiter=';')
 
 apps_processed = []
-for app in app_list:
+for index, app in enumerate(app_list):
     file_path = path.join(HTMLfilesFolder, app['id'] + '.htm')
-    print("Processing file {}".format(file_path))
+    print("Processing row {} file {}".format(index, file_path))
 
     # Skip missing files
     if not path.exists(file_path):
