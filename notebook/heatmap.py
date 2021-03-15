@@ -8,7 +8,7 @@ from matplotlib import gridspec
 
 # %% Load raw data files
 
-apps = pd.read_csv('../data/processed/apps.csv', delimiter=';') 
+apps = pd.read_csv('../data/processed/apps_top1000_all.csv', delimiter=';') 
 
 # %% Helper vars
 
