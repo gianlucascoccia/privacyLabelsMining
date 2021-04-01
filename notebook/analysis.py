@@ -94,8 +94,8 @@ r2 = [x * 1.33 for x in r1]
 r1 = [x - barWidth for x in r2]
 r3 = [x + barWidth for x in r2]
 
-plt.barh(r3, usages.tracking_percentage, color='red', height=barWidth, label='Tracking data')
-plt.barh(r2, usages.linked_percentage, color='blue', height=barWidth, label='Linked data')
+plt.barh(r3, usages.tracking_percentage, color='#D00000', height=barWidth, label='Tracking data')
+plt.barh(r2, usages.linked_percentage, color='#2e72b2', height=barWidth, label='Linked data')
 plt.barh(r1, usages.unlinked_percentage, color='green', height=barWidth, label='Unlinked data')
 
 plot_ticks = [x.replace('&', ' & ').capitalize() for x in usages.category]
