@@ -66,59 +66,7 @@ for df in apps_types:
 
     print("In the {} apps there are {}% using tracking data, {}% using linked data, and {}% using unlinked data, and {}% using data of any kind".format(df[0], round(t_percentage,2), round(l_percentage,2), round(u_percentage,2), round(any_percentage,2) ))
 
-# %% Usages by category
-
-usages = apps.groupby(['category']).size().reset_index(name = 'app_count')
-usages['tracking_count'] = apps[apps['has_tracking']].groupby(['category']).size().values
-usages['linked_count'] = apps[apps['has_linked']].groupby(['category']).size().values
-usages['unlinked_count'] = apps[apps['has_unlinked']].groupby(['category']).size().values
-usages['tracking_percentage'] = usages['tracking_count'] / usages['app_count'] * 100
-usages['linked_percentage'] = usages['linked_count'] / usages['app_count'] * 100
-usages['unlinked_percentage'] = usages['unlinked_count'] / usages['app_count'] * 100
-
-usages = usages.sort_values(by='tracking_percentage', ascending=True)
-usages.reset_index(drop=True, inplace=True)
-
-# %% Bar plot by category
-
-barWidth = 0.33
-
-fig = plt.figure(num=None, figsize=(4.5, 8), dpi=80, facecolor='w', edgecolor='k')
-
-plt.xlim(0,110)
-plt.ylim(-1.75, len(usages) * 1.33)
-
-# Set position of bar on y axis
-r1 = np.arange(len(usages))
-r2 = [x * 1.33 for x in r1]
-r1 = [x - barWidth for x in r2]
-r3 = [x + barWidth for x in r2]
-
-plt.barh(r3, usages.tracking_percentage, color='#D00000', height=barWidth, label='Tracking data')
-plt.barh(r2, usages.linked_percentage, color='#2e72b2', height=barWidth, label='Linked data')
-plt.barh(r1, usages.unlinked_percentage, color='green', height=barWidth, label='Unlinked data')
-
-plot_ticks = [x.replace('&', ' & ').capitalize() for x in usages.category]
-
-# Add xticks on the middle of the group bars
-plt.ylabel('App category', size=8)
-plt.xlabel('Usages % (#)', size=8)
-plt.yticks(r2, plot_ticks, size=7)
-plt.xticks(size=7) 
-
-# Add text on bars
-textsize = 4.5
-def format_label(percentage, count):
-    return '{}% ({})'.format(round(percentage,2), count)
-
-for index, row in usages.iterrows():
-    plt.text(row['tracking_percentage'] + 1, r3[index] - 0.1, format_label(row['tracking_percentage'], row['tracking_count']), size = textsize)
-    plt.text(row['linked_percentage'] + 1, r2[index] - 0.1, format_label(row['linked_percentage'], row['linked_count']), size = textsize)
-    plt.text(row['unlinked_percentage'] + 1, r1[index] - 0.1, format_label(row['unlinked_percentage'], row['unlinked_count']), size = textsize)
-    
-plt.legend(fontsize=5.5, loc="lower left", ncol=3)
-plt.tight_layout()
-plt.savefig('figures/Usages.pdf', dpi=300)  
-plt.show()
+# %% Correlations
+apps.corr(method='spearman').to_csv('correlation.csv')
 
 # %%

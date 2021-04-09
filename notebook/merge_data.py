@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-# %% Set path fopr output file
+# %% Set path for output file
 
 OUT_FILE = '../data/processed/apps_top1000_all.csv'
 
@@ -10,6 +10,10 @@ OUT_FILE = '../data/processed/apps_top1000_all.csv'
 
 app_list_free = pd.read_csv('../data/raw/top_1000_apps_free.csv', delimiter=';')
 app_list_top = pd.read_csv('../data/raw/top_1000_apps_top_grossing.csv', delimiter=';')
+
+# Rename cols to not lose information when merging
+app_list_free = app_list_free.rename(columns={'top_chart_position': 'top_chart_position_free'}) 
+app_list_top = app_list_top.rename(columns={'top_chart_position': 'top_chart_position_grossing'}) 
 
 store_data_free = pd.read_csv('../data/raw/top_1000_apps_free_store_data.csv', delimiter=';')
 store_data_top = pd.read_csv('../data/raw/top_1000_apps_top_grossing_store_data.csv', delimiter=';')
