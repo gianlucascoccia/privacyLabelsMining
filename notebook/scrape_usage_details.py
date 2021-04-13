@@ -92,7 +92,7 @@ for index, row in app_list.iterrows():
         # app no longer exists, write a dummy file
         if response.status_code == 404:
             with open(out_file_path, 'w') as f:
-                json.dump({'error_type':404}, f, indent=4)    
+                json.dump(str({'error_type':404}), f, indent=4)    
 
         if response.status_code == 429:
             print("API rate excedeed")

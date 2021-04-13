@@ -6,24 +6,25 @@ import pandas as pd
 import numpy as np
 import json
 from io import StringIO
+from collections import Counter
 
 # %% params
 
-OUT_FILE = "../data/raw/top_1000_apps_top_grossing_purposes.csv"
-IN_FILE = "../data/raw/top_1000_apps_top_grossing_store_data.csv"
+OUT_FILE = "../data/raw/top_1000_apps_free_purposes.csv"
+IN_FILE = "../data/raw/top_1000_apps_free_store_data.csv"
 IN_FOLDER = "../data/raw/labelsPurpose"
 
 # %% helper vars 
 
 usage_prefixes = ['l', 'u']
 purposes = ['app_functionality', 'other_purposes', 'analytics', 'developers_advertising', 'product_personalization', 'third_party_advertising']
-data_types = ['diagnostics', 'health_and_fitness', 'financial_info', 'identifiers', 'usage_data', 'browsing_history', 'sensitive_info', 'contact_info', 'user_content', 'other', 'purchases', 'contacts', 'location', 'search_history']
+data_types = ['diagnostics', 'health_&_fitness', 'financial_info', 'identifiers', 'usage_data', 'browsing_history', 'sensitive_info', 'contact_info', 'user_content', 'other_data', 'purchases', 'contacts', 'location', 'search_history']
 
 cols = set()
 for u in usage_prefixes:
     for p in purposes:
         for d in data_types:
-            cols.add(u + '_' + p + '_' + d)
+            cols.add(u + p + '_' + d)
 
 observed_usages = pd.DataFrame(columns=['id'] + list(cols), dtype='Int64')
 
@@ -34,6 +35,7 @@ app_list = pd.read_csv(IN_FILE, ";")
 # %% iterate on and parse purposes files
 
 df_rows = []
+datums = Counter()
 for index, row in app_list.iterrows():
 
     # check if app id is valid
@@ -73,28 +75,32 @@ for index, row in app_list.iterrows():
                 if privacy_type['identifier'] == 'DATA_NOT_COLLECTED':
                     continue
                 elif privacy_type['identifier'] == 'DATA_USED_TO_TRACK_YOU':
-                    prefix = 't_'
+                    prefix = 't'
                 elif privacy_type['identifier'] == 'DATA_LINKED_TO_YOU':
-                    prefix = 'l_'
+                    prefix = 'l'
                 elif privacy_type['identifier'] == 'DATA_NOT_LINKED_TO_YOU':
-                    prefix = 'u_'    
+                    prefix = 'u'    
 
                 # Iterate on purposes
                 for purpose in privacy_type['purposes']:
                     
                     # Check purpose type
                     typed_purpose = prefix + purpose['identifier'].lower()
-
+                    
                     # Data used for this purpose
                     for category in purpose['dataCategories']:
                         typed_purpose_usage = typed_purpose + '_' + category['identifier'].lower() 
 
                         usages_row.update({typed_purpose_usage:1})
 
-                    # TODO: individual datums affected
+                        # individual datums affected
+                        for d in category['dataTypes']:
+                            datums[d] += 1 
 
     # Update processed items
     df_rows.append(usages_row)
+
+print(datums)
 
 # %% update results data frame                    
 
@@ -103,4 +109,6 @@ observed_usages = observed_usages.fillna(0)
 
 # %% write output
 
-observed_usages.to_csv(OUT_FILE)
+observed_usages.to_csv(OUT_FILE, sep=";")
+
+# %%
