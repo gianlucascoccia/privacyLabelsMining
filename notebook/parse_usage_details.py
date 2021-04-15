@@ -10,21 +10,22 @@ from collections import Counter
 
 # %% params
 
-OUT_FILE = "../data/raw/top_1000_apps_free_purposes.csv"
-IN_FILE = "../data/raw/top_1000_apps_free_store_data.csv"
+OUT_FILE = "../data/raw/top_1000_apps_top_grossing_purposes.csv"
+IN_FILE = "../data/raw/top_1000_apps_top_grossing_store_data.csv"
 IN_FOLDER = "../data/raw/labelsPurpose"
 
 # %% helper vars 
 
 usage_prefixes = ['l', 'u']
-purposes = ['app_functionality', 'other_purposes', 'analytics', 'developers_advertising', 'product_personalization', 'third_party_advertising']
-data_types = ['diagnostics', 'health_&_fitness', 'financial_info', 'identifiers', 'usage_data', 'browsing_history', 'sensitive_info', 'contact_info', 'user_content', 'other_data', 'purchases', 'contacts', 'location', 'search_history']
+purposes = ['App Functionality', 'Other Purposes', 'Analytics', 'Developers Advertising', 'Product Personalization', 'Third Party Advertising']
+
+data_types = ['Diagnostics', 'Health & Fitness', 'Financial Info', 'Identifiers', 'Usage Data', 'Browsing History', 'Sensitive Info', 'Contact Info', 'User Content', 'Other Data', 'Purchases', 'Contacts', 'Location', 'Search History']
 
 cols = set()
 for u in usage_prefixes:
     for p in purposes:
         for d in data_types:
-            cols.add(u + p + '_' + d)
+            cols.add(u + p.replace(' ','') + d.replace(' ',''))
 
 observed_usages = pd.DataFrame(columns=['id'] + list(cols), dtype='Int64')
 
@@ -85,11 +86,27 @@ for index, row in app_list.iterrows():
                 for purpose in privacy_type['purposes']:
                     
                     # Check purpose type
-                    typed_purpose = prefix + purpose['identifier'].lower()
-                    
+                    typed_purpose = prefix + purpose['identifier'].title().replace('_','')
+
+                    #print(purpose['identifier'])
+
                     # Data used for this purpose
                     for category in purpose['dataCategories']:
-                        typed_purpose_usage = typed_purpose + '_' + category['identifier'].lower() 
+
+                        # Check required to have uniform labels among collected data
+                        if category['identifier'] == 'HEALTH_AND_FITNESS':
+                            lab = 'Health&Fitness'
+                        elif category['identifier'] == 'OTHER':
+                            lab = 'OtherData'
+                        else:
+                            lab = category['identifier'].title().replace('_','')
+                        
+                        typed_purpose_usage = typed_purpose + lab
+
+
+
+                        #print(category['identifier'])
+                        #print(typed_purpose_usage)
 
                         usages_row.update({typed_purpose_usage:1})
 
