@@ -71,12 +71,12 @@ for x in purposes:
 # %% Infer purpose of tracking data 
 
 # Example
-#apps['tThirdPartyAdvertisingContactInfo'] = ((apps['uThirdPartyAdvertisingContactInfo'] + apps['lThirdPartyAdvertisingContactInfo']) == 1) & (apps['tContactInfo'] == 1)
+#apps['tThirdPartyAdvertisingContactInfo'] = ((apps['uThirdPartyAdvertisingContactInfo'] + apps['lThirdPartyAdvertisingContactInfo']) >= 1) & (apps['tContactInfo'] >= 1)
 
 for dt in data_types:
     for p in purposes:
         curr = p.replace(' ', '') + dt.replace(' ', '')
-        apps['t' + curr] = ((apps['u' + curr] + apps['l' + curr]) == 1) & (apps['t' + dt.replace(' ','')] == 1)
+        apps['t' + curr] = ((apps['u' + curr] + apps['l' + curr]) >= 1) & (apps['t' + dt.replace(' ','')] >= 1)
 
 # %% Counts of tracking, linked and unlinked
 
@@ -219,8 +219,20 @@ for df in apps_types:
 
 # %% Correlations
 
-# TODO: analyze more in-depth
+# TODO: automate the analysis of results
 
 apps.corr(method='spearman').to_csv('correlation.csv')
+
+# %% Plot ranking vs data used
+
+plot_data = apps
+plot_data.dropna(subset=['top_chart_position_free'])
+
+fig = plt.figure(figsize=(15, 8))
+plt.scatter(plot_data['tracking_count'], plot_data['top_chart_position_free']) 
+plt.gca().invert_yaxis()
+plt.tight_layout()
+plt.savefig('figures/tracking_vs_ranking.png', facecolor='white')
+
 
 # %%
